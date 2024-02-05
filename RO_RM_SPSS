@@ -1,0 +1,15 @@
+* GLM repeated measure analysis analyzing the beta values of the LC OR SN/VTA for the factors reward, valence and event 
+
+GLM reward valence event
+  /WSFACTOR=reward(2) valence(3) event(2)  *  Within-subject factors and their levels.
+  /METHOD=SSTYPE(3)  *  Type III sums of squares
+  /REPEATED= reward valence event | MEASURE=beta_LC  * Defines repeated measures and the dependent variable.
+  /CRITERIA=ALPHA(.05)  * Sets the alpha level for significance tests at .05.
+  /DESIGN= reward valence event reward*valence reward*event valence*event reward*valence*event.  
+* Specifies the model design, including all main effects and interactions.
+
+* paired t-test
+T-TEST
+  /PAIRS=pretest WITH posttest (PAIRED)
+  /CRITERIA=ALPHA(.05).
+
