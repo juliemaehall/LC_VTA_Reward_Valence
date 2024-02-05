@@ -1,0 +1,16 @@
+# Behavioural accuracy data 
+results_ez = ezANOVA(data = data,
+                     dv = .(accuracy),          # Dependent variable
+                     wid = .(subj),          # Column that identifies each subject
+                     within = .(valance, reward), # Within-subject factors
+                     detailed = TRUE,           # Request detailed output
+                     type = 3)                  # Type 3 sums of squares
+
+
+RT data
+results_ez = ezANOVA(data = data_RT,
+                     dv = .(RT),                # Dependent variable
+                     wid = .(subj),              # Column that identifies each subject
+                     within = .(valance, reward), # Within-subject factors
+                     detailed = TRUE,           # Request detailed output
+                     type = 3)                  # Type 3 sums of squares
