@@ -1,3 +1,52 @@
+#load data files in R 
+# Create an empty list to store the data frames
+data_list <- list()
+nsubj = 38
+## Loop through the files that have the specified numbers
+for (i in 1:nsubj) {
+  file_name <- paste0("/path/to/file/", i, ".xlsx") 
+  data <- read_excel(file_name, 
+                     col_names = TRUE)
+  # Select the specified columns
+  data <- data[,c("subj", "valence", "reward", "Accuracy", "RT")]
+
+  #make sure Acc and RT are numeric, reward & valence factors 
+  data$Accuracy <- as.numeric(data$Accuracy)
+  data$RT <- as.numeric(data$RT)
+  data$reward <- as.factor(data$reward)
+  data$valance <- as.factor(data$valence)
+  data$subj <- as.factor(data$subj)
+}
+
+#format RT (only select accurate trials)
+data_RT <- subset(df_behav, df_behav$Accuracy == '1')
+
+# mean and sd Accuracy 
+data %>%
+  group_by(reward) %>%
+  get_summary_stats(Accuracy, type = "mean_sd")
+
+data %>%
+  group_by(valence) %>%
+  get_summary_stats(Accuracy, type = "mean_sd")
+
+data %>%
+  group_by(reward, valence) %>%
+  get_summary_stats(Accuracy, type = "mean_sd")
+
+# RT mean and SD 
+df_behav_RT %>%
+  group_by(reward) %>%
+  get_summary_stats(RT, type = "mean_sd")
+
+df_behav_RT %>%
+  group_by(valence) %>%
+  get_summary_stats(RT, type = "mean_sd")
+
+df_behav_RT %>%
+  group_by(reward, valence) %>%
+  get_summary_stats(RT, type = "mean_sd")
+
 # Behavioural accuracy data 
 results_ez = ezANOVA(data = data,
                      dv = .(accuracy),          # Dependent variable
@@ -14,3 +63,59 @@ results_ez = ezANOVA(data = data_RT,
                      within = .(valance, reward), # Within-subject factors
                      detailed = TRUE,           # Request detailed output
                      type = 3)                  # Type 3 sums of squares
+
+
+
+{r RT_1}
+
+source('/Users/halljm/Documents/Projecten/1_Reward_Emotion_fMRI/plot_annotation.R')
+source('/Users/halljm/Documents/Projecten/geom_flat_violin.R')
+y_position_line <- 0.85
+y_position_line2 <- 0.88# where max_y_value is the highest value in your data and offset is how high above this you want the line
+y_position_text <- 0.86
+y_position_text2 <- 0.89# slightly above the line for the asterisk
+cbp2 <- c("grey32","grey85")
+
+
+
+#plot RTs
+RT <- ggplot(data_RT, aes(x=valence, y=RT, fill=reward)) +
+      geom_flat_violin(alpha=1, position = position_dodge(width = 0.7),size=1,color=NA,  trim=TRUE) + 
+    # geom_boxplot(alpha=0.7, width=0.1, colour = "black", position = position_dodge(.7), outlier.shape = NA) + 
+      stat_summary(fun = "mean",
+               geom = "crossbar", 
+               width = 0.1,
+               colour = "black",
+               position =  position_dodge(.7)) + 
+     theme_minimal()+
+     ylab(  c("RT (sec)")  )  +
+      xlab(  c("Valence")  )  +
+      #rremove("legend.title") +
+      theme(#panel.border = element_rect(colour = "black", fill=NA, size=2),
+        axis.line = element_line(colour = "black",size=1),
+        axis.ticks = element_line(size=1,color="black"),
+        axis.text = element_text(color="black"),
+        axis.ticks.length=unit(0.2,"cm"),
+        legend.position = c(0.92, 0.95))+
+      font("xylab",size=15)+  
+      font("xy",size=15)+ 
+      font("xy.text", size = 14) +  
+      font("legend.text",size = 13)  +
+      scale_x_discrete(limits=c("negative", "neutral", "positive"))+ 
+      scale_fill_manual(values=cbp2, #c("#d8b365","#5ab4ac"),
+                       name="",
+                       labels=c("no reward", "reward")) +
+      # Line for neutral and negative
+      geom_segment(aes(x=1, y=y_position_line, xend=2, yend=y_position_line), color="darkgrey") +
+      # Line for negative and positive
+      geom_segment(aes(x=1, y=y_position_line2, xend=3, yend=y_position_line2), color="darkgrey")+
+      # Asterisk for neutral and negative
+      geom_text(aes(x=1.5, y=y_position_text, label="*"), color="darkgrey", size=2) +
+      # Asterisk for negative and positive
+      geom_text(aes(x=2, y=y_position_text2, label="*"), color="darkgrey", size=2) +
+      ggtitle("Response times") + theme(plot.title = element_text(size = 16))
+      #guides(fill = guide_legend(override.aes = list(alpha = 1,color="black")))
+
+
+
+plot(RT)
