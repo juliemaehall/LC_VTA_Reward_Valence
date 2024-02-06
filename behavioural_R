@@ -19,7 +19,7 @@ for (i in 1:nsubj) {
 }
 
 #format RT (only select accurate trials)
-data_RT <- subset(df_behav, df_behav$Accuracy == '1')
+data_RT <- subset(data, data$Accuracy == '1')
 
 # mean and sd Accuracy 
 data %>%
