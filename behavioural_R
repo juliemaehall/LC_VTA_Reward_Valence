@@ -66,19 +66,14 @@ results_ez = ezANOVA(data = data_RT,
 
 
 
-{r RT_1}
-
-source('/Users/halljm/Documents/Projecten/1_Reward_Emotion_fMRI/plot_annotation.R')
-source('/Users/halljm/Documents/Projecten/geom_flat_violin.R')
-y_position_line <- 0.85
-y_position_line2 <- 0.88# where max_y_value is the highest value in your data and offset is how high above this you want the line
-y_position_text <- 0.86
-y_position_text2 <- 0.89# slightly above the line for the asterisk
-cbp2 <- c("grey32","grey85")
-
-
 
 #plot RTs
+y_position_line <- 0.85
+y_position_line2 <- 0.88 # where max_y_value is the highest value in the data / offset : height of the line
+y_position_text <- 0.86
+y_position_text2 <- 0.89 # slightly above the line for the asterisk
+cbp2 <- c("grey32","grey85")
+
 RT <- ggplot(data_RT, aes(x=valence, y=RT, fill=reward)) +
       geom_flat_violin(alpha=1, position = position_dodge(width = 0.7),size=1,color=NA,  trim=TRUE) + 
     # geom_boxplot(alpha=0.7, width=0.1, colour = "black", position = position_dodge(.7), outlier.shape = NA) + 
@@ -90,8 +85,8 @@ RT <- ggplot(data_RT, aes(x=valence, y=RT, fill=reward)) +
      theme_minimal()+
      ylab(  c("RT (sec)")  )  +
       xlab(  c("Valence")  )  +
-      #rremove("legend.title") +
-      theme(#panel.border = element_rect(colour = "black", fill=NA, size=2),
+
+      theme(
         axis.line = element_line(colour = "black",size=1),
         axis.ticks = element_line(size=1,color="black"),
         axis.text = element_text(color="black"),
