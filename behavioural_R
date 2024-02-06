@@ -14,7 +14,7 @@ for (i in 1:nsubj) {
   data$Accuracy <- as.numeric(data$Accuracy)
   data$RT <- as.numeric(data$RT)
   data$reward <- as.factor(data$reward)
-  data$valance <- as.factor(data$valence)
+  data$valence <- as.factor(data$valence)
   data$subj <- as.factor(data$subj)
 }
 
@@ -51,7 +51,7 @@ df_behav_RT %>%
 results_ez = ezANOVA(data = data,
                      dv = .(accuracy),          # Dependent variable
                      wid = .(subj),          # Column that identifies each subject
-                     within = .(valance, reward), # Within-subject factors
+                     within = .(valence, reward), # Within-subject factors
                      detailed = TRUE,           # Request detailed output
                      type = 3)                  # Type 3 sums of squares
 
@@ -60,7 +60,7 @@ RT data
 results_ez = ezANOVA(data = data_RT,
                      dv = .(RT),                # Dependent variable
                      wid = .(subj),              # Column that identifies each subject
-                     within = .(valance, reward), # Within-subject factors
+                     within = .(valence, reward), # Within-subject factors
                      detailed = TRUE,           # Request detailed output
                      type = 3)                  # Type 3 sums of squares
 
